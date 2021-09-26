@@ -1,0 +1,87 @@
+stats = data.groupby(‘emp’)[‘Spend’].mean()
+
+stats = stats.reset_index()
+
+data = pd.merge(data, stats, on = ‘emp’)
+
+ 
+
+ 
+
+stats = data.groupby(‘emp’).agg({‘spend’ : [np.sum,len]})
+
+stats.reset_index()
+
+global_spend = data [‘spend’].mean()
+
+stats[‘spend_category’] = (stats[‘sum’] + global_spend*30) / (stats[‘len’] + 30)
+
+
+
+[df.columns[i] for i,x in enumerate(df.dtypes) if x == 'object']
+
+ 
+
+df.select_dtypes(include='object')
+
+ 
+
+https://enterprise-confluence.aexp.com/confluence/display/CLMMLS/Publications+and+resources?preview=/186262312/187028984/%5BJeff_Knupp%5D_Writing_idiomatic_Python_3.pdf
+
+# Get the current Work Directory
+
+currentdir = os.getcwd()
+
+ 
+
+# Join two name
+
+pjoin = (currentdir,'bau_apr.csv')
+
+ 
+
+# how to make categoires using qcuts
+
+lookup['adss_grp'] = pd.cut(lookup['qscore'] , bins = [-9999,10,20,40,9999], labels = ['1. <1%', '2. 1% - 2%', '3.2% - 4%','4. >4%'])
+
+lookup['pref_grp'] = pd.cut(lookup['bprfline'], bins = [-99999,2000,5000,10000,15000,25000,99999], labels = ['1.<2k', '2. 2k - 5k', '3.5k - 10k', '4.10k - 15k', '5.15k - 25k','6. >25k'])
+
+ 
+
+# looking at variable cross tab
+
+lookup.groupby(['adss_grp'])['qscore'].mean()
+
+lookup.groupby(['pref_grp'])['bprfline'].mean()
+
+pd.crosstab(lookup.adss_grp,lookup.pref_grp,values = lookup.bprfline,aggfunc = np.mean)
+
+ 
+
+# concatenating and remaning the output
+
+ 
+
+a= lookup.groupby('adss_grp').mean()
+
+b= lookup[['adss_grp','pcn']].groupby('adss_grp').count()
+
+b.rename(columns = {'pcn':'volume'},inplace = True)
+
+z= pd.concat([b,a],axis = 1)
+
+ 
+
+# How to treat the data
+
+ 
+
+ 
+
+data['pricing_prod'] = 'OTHER'
+
+data.loc[((data['business_org_cd'] == '1S') & (data['pricing_prod'] == 'OTHER')), 'pricing_prod'] = 'OTHER SAC'
+
+data.loc[((data['business_org_cd'] == '1P') & (data['pricing_prod'] == 'OTHER')),'pricing_prod'] = 'OTHER PROP'
+
+data.loc[((data['product_group_desc'] == 'MERCEDES BENZ') ), 'pricing_prod'] = 'MERCBENZ'
